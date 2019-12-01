@@ -29,9 +29,9 @@
    - a.reshape(row, col)
    - a.T 转置
    - a.resize((row, col)) inplace的reshape
-7. 数组堆叠
-   - vstack/hstack
-   - r_[]/c_[] 快捷堆叠表达
+7. 数组堆叠 （高维数组慎用）
+   - stack/vstack/hstack
+   - r_[]/c_[] 快捷堆叠表达 
 8. 数组分割：hsplit/vsplit(a, cnt)
 9. 数组复制与视图
    - 数组赋值操作不复制数据
@@ -49,3 +49,7 @@
     - a1.dot(a2) 矩阵乘法
     - mat(a) 得到矩阵（就可以用*表示矩阵乘法）
     - m.A 矩阵得数组
+13. 储存
+    - save(f, array)
+    - savez(f, a=array1, b=array2)
+    - chunk = load(f)

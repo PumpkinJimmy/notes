@@ -111,3 +111,8 @@ set -g default-terminal "xterm-256color"
 (emmet)
 1.let g:user_emmet_leader_key='<tab>'
 and enter <tab>,
+
+
+
+(miscellaneous)
+1. v + s Quick replace
