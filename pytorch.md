@@ -62,9 +62,15 @@ torch.optim提供了一堆优化算法类如SGD, AdaGrad, RMSProp, Adam
 - 调用loss.backward()之后，调用optimizer.step()执行梯度下降
 他们的
 
+### cuda加速
+- 安装的时候必须正确安装
+- torch.cuda.is_available()检验是否可以使用
+- Tensor,网络（Module）都可以采用.cuda()写法获得cuda版本
+- 要获得加速效果，务必保证网络跟表示数据的tensor都使用了cuda
+- 在多GPU环境下使用DataParallel获得多GPU加速
 ### 奇技淫巧
 - tensor.view/reshape简写，可以只指出某些维度大小然后其余写-1即可自动推断
-  如1000*28*28变成10000个向量可以写成view(10000, -1)
+  如1000 * 28 * 28变成10000个向量可以写成view(10000, -1)
 
 ### 坑点
 - tensor数值运算对数据类型要求非常严格，两个相互运算的tensor很可能要求类型完全一致（甚至float和double都不行）

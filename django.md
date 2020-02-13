@@ -32,3 +32,14 @@ Hello, Django!
 ### DateField.auto_now & DateField.auto_now_add
 DateField.auto_now 指示一个日期字段每次执行save时自动使用当天日期，适用于last-modified一类的字段
 DateField.auto_now_add指示一个日期字段自动使用对象创建时的日期，适用于create-date一类的字段
+### 使用static
+在产品环境中，静态文件请求肯定是交给反向代理（Nginx）直接处理。
+但在开发阶段，可以使用Django提供的静态文件机制来使用静态文件。
+使用方法：
+1. 在需要使用静态文件的**html文件开头**添加`{% load static %}`加载static标签
+2. 在引用静态文件的位置使用`{% static path %}`来引用，其中path指代文件在STATIC_ROOT下的相对路径。
+### 使用session
+session基于cookie，但只在客户端保存sessionkey，具体的会话内容保存在服务端，从而提高安全性。
+session通过自带的一个Django自带的app实现，默认开启，直接用就可以了。
+session可以看作是存放当前用户对应的数据的容器。
+基本语法：把`request.session`当作字典来存取。

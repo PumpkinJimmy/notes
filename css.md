@@ -1,4 +1,14 @@
 ## CSS笔记
+### 布局
+- 传统盒子模型
+  - 行为容易控制
+  - 不够灵活
+- table
+  - 用于对齐大量元素
+- float
+  - 想用position的时候用
+  - 行为不容易掌握，在最顶层就要设计好
+  - 灵活
 ### 动画
 简单动画用transform变形移位+transition过渡
 复杂的用keyframes+animation
