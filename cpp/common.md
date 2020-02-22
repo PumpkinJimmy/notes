@@ -26,3 +26,28 @@ mp.insert({3, "c"});
 这种用法的奥秘在于：
 1. 编译器的支持
 2. initialize_list模板类支持变长的、任意类型的序列（尤其用于map这种每个项类型不一样的东西）
+
+### 宏
+宏可以用于移除一些重复代码，可以代码生成（语言体系内部不可替代），甚至用来编写DSL（慎）
+用法：
+- 分为一般宏和带参数宏
+- 宏定义结尾不用写分号（如写上分号则当作是**宏体的一部分**），**一个宏定义只能写一行，多行情形必须加行连符号**
+- 一般宏：
+  - 使用`#define 宏名 宏体`定义
+  - 宏体可以省略，常结合`#ifdef` `#ifndef`使用
+  - 有部分预定义的宏如`__LINE__``__FILE__`分别表示所在行号、处理的文件名等
+  - 可以由外部（如CMake等编译系统）传入用以在预处理阶段搞事（如条件编译）
+- 带参数宏：
+  - #的特殊用法：
+  ```cpp
+  #define STR(s) #s // 替换为"s"
+  #define CONCAT(a,b) a##b // 替换为ab（连接起来）
+  ```
+  - 参数为宏时，这个宏会继续展开；特别地，宏体包含#用法时参数中的宏不会再展开，但可以通过一层间接宏来展开
+  - 一个综合运用：
+  ```cpp
+  #define ___ANONYMOUS1(type, var, line) type var##line  
+  #define __ANONYMOUS0(type,  line) ___ANONYMOUS1(type, _anonymous, line)  
+  #define ANONYMOUS(type) __ANONYMOUS0(type, __LINE__)
+  // 假设在第70行，ANONYMOUS(static int)展开为 static int _anonymous70
+  ```
