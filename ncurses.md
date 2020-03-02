@@ -18,8 +18,11 @@ endwin(); // 退出Ncurses
 - `addch` `printw` ncurses版的putchar和printf
 - `getch` `scanw` ncurses版的getchar和scanf，**注意，由于要处理额外信息如方向键，返回类型不是char而是chtype**
 - mv系列表示移动到指定位置再操作，如`mvaddch` `mvprintw`用于移动到指定位置再输出，**注意，坐标是（行数，列数）的形式**
+
   测试1
+  
   测试2：一段话
+  
 - `attron` `attroff` 用于开关特性，特性包括粗体字、不可见、闪烁字、反色、彩色等
 - `chgat` 改变后续若干字符特性和颜色，-1表示改变一整行，有对应的mv版本`mvchgat`
 - `curs_set(0)` 隐藏光标
