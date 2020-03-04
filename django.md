@@ -43,3 +43,19 @@ session基于cookie，但只在客户端保存sessionkey，具体的会话内容
 session通过自带的一个Django自带的app实现，默认开启，直接用就可以了。
 session可以看作是存放当前用户对应的数据的容器。
 基本语法：把`request.session`当作字典来存取。
+### 重定向
+- 基本方法是使视图返回`django.http.HttpResponseRedirect(url)`
+- 快捷方法是使用使用`django.shortcuts.redirect`，传递参数可以是url，也可以是配置的url名称加上适当的参数（其实就是省了自己用`reverse`）
+### 使用auth
+Django自带的用户验证系统。
+三个重要的Model: User, Group, Permission.
+- 位于`django.contrib.auth`中，下面简写为`auth`
+- `auth.authenticate(username= , password= )`给定用户名及密码验证是否通过，通过则返回相应的User对象，否则返回None
+- `auth.models`含三个重要Model即`User` `Group` `Permission`，其中`Group` `Permission`都是`User`的`ManyToMany`字段成员
+- 密码使用加盐散列算法处理过，故不可直接操作
+- 创建用户：`user = User.objects.create_user; user.save()`
+- 改密码：`user.set_password`
+- 检查权限：`user.has_perm`
+- 检查是否当前已登录：`request.user.is_authenticated`
+- 登录：`auth.login(request, user)`；登出：`auth.logout(request)`
+- `login_required(login_url= )`装饰器可用于必须登录才能访问的视图，提供参数为登录页面的url，若不提供参数，则使用`settings.LOGIN_URL`的配置
