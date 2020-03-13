@@ -59,3 +59,6 @@ Django自带的用户验证系统。
 - 检查是否当前已登录：`request.user.is_authenticated`
 - 登录：`auth.login(request, user)`；登出：`auth.logout(request)`
 - `login_required(login_url= )`装饰器可用于必须登录才能访问的视图，提供参数为登录页面的url，若不提供参数，则使用`settings.LOGIN_URL`的配置
+
+### ManyToMany Field
+`M.mtm.add()` 向ManyToMany字段添加对象
