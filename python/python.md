@@ -58,3 +58,30 @@ time用传统的C风格函数处理时间
 - str是Unicode串，每一个字符占4字节，用于统一处理多字节字符，是等长编码的串；bytes是字节序列，1字符1字节
 - str专用于处理字符数据；bytes不一定用来处理字符数据，它既可以是经过gbk/utf-8编码的多字节变长字符序列，也可以是一般的二进制数据
 - str下标访问得到的是**长度为一的str**，bytes下标访问得到的是**整数**
+### open的换行处理
+不同平台上的换行符各不相同（`\n, \r\n, \r`），Python open使用newline关键字参数来指定行为
+注意：所有讨论都基于文本模式打开文件（二进制模式不对换行符做处理）
+- `newline=None` 默认设置，自动根据平台处理，输入时统一为`\n`，输出时相应地对`\n`转换（即Windows下会转换成`\r\n`）
+- `newline=''` 自动根据平台进行分行，但不做处理地返回换行符 
+### csv
+标准库csv模块提供轻量级的csv文件读写功能
+
+#### csv QuickStart
+```python
+csv.register_dialect('mydialect', deliminator=':', linetermintor='#') # 自定义规则
+with open("mycsv.csv", newline='') as f: # 防止换行符被转换
+  reader = csv.Reader(f)
+  for row in reader:
+    print(row)
+
+with open("mycsv.csv", newline='') as f: # 防止换行符被转换
+  writer = csv.Writer(f, dialect='mydialect')
+  writer.writeheader()
+  writer.writerow(row)
+
+with open("mycsv.csv", newline='') as f: # 防止换行符被转换
+  writer = csv.DictWriter(f, fieldnames=header, dialect='mydialect') # 对应字段写行
+  writer.writeheader()
+  writer.writerow(dick_row)
+```
+

@@ -13,15 +13,17 @@
 `requests.get(url)`系列是主要的工具：
 - 有`get(),post(),head(),option()`等，对应HTTP的`GET,POST,HEAD,OPTION`等方法。
 - 必须的参数只有请求的url
-- 关键字参数`headers=`指定请求头
-- 关键字参数`cookies=`指定cookie，注意所需的结构是键-值对应的字典
+- `headers=`指定请求头
+- `cookies=`指定cookie，注意所需的结构是键-值对应的字典
 - `encoding=`指定编码
+- `json=`指定请求的json的内容（会自动处理转换和`Content-Type`）
 - 返回一个Response
 
-关于Response:
+Response:
 - `resp.text`代表返回的内容的`str`，一般能根据响应头部来正确解码，用于文本数据；`resp.content`代表返回的二进制数据（即形式解码）
 - `resp.headers`响应头部
 - `resp.status_code`状态码
+- `resp.json`返回的json
 
 ### bs4.BeautifulSoup
 非常方便的HTML DOM解析
