@@ -85,3 +85,31 @@ with open("mycsv.csv", newline='') as f: # 防止换行符被转换
   writer.writerow(dick_row)
 ```
 
+### shelve
+如果不像用复杂的SQL数据库，`shelve`是个持久化数据的好选择
+### QuickStart
+```python
+shelf = shelve.open("my.db")
+shelf['name'] = bbpumpkin # 储存
+print(shelf['name']) # 访问
+shelf.close() # 关闭
+```
+### 说明
+- `shelve.open`
+  - `shelve.open`返回`Shelf`一个对象，`Shelf`是一个类字典对象，支持基本的字典操作
+  - `shelve.open`可以指定`flag=`
+    - `flag=c`（默认）如果db不存在，则新建一个，否则载入
+    - `flag=r`只读
+    - `flag=w`可读写
+  - `keyencoding=`指定键的编码
+  - `writeback=`默认是False
+- Shelf的键只能是str
+- Shelf对象在每次设置键值时都会自动保存数据到文件。注意，受限于Python实现，**对Shelf下的mutable对象（如list,dict）进行修改无法保存到文件**，例如：
+  ```python
+  shelf['list1'] = [0, 1, 2]
+  shelf['list1'].append(3) # 无效！！shelf['list']仍是[0, 1, 2]
+  ```
+  解决方案是指定`writeback=True`
+- `writeback`指明了Shelf的行为
+  - 若`writeback=False`（默认），则每次设置键值时都写入文件，但无法处理mutable字典值的内部修改
+  - 若`writeback=True`，则整个Shelf字典保存在内存，所有修改都可以进行，但必须显式调用`shelf.sync()/shelf.close()`才会保存到文件，且每次都写入整个字典（由于不知道改了哪里），导致保存不及时，以及占用内存多，关闭慢

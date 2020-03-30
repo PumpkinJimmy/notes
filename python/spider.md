@@ -16,14 +16,14 @@
 - `headers=`指定请求头
 - `cookies=`指定cookie，注意所需的结构是键-值对应的字典
 - `encoding=`指定编码
-- `json=`指定请求的json的内容（会自动处理转换和`Content-Type`）
+- `json=`指定请求的json的内容（会自动处理转换和`Content-Type`）（注意，json请求的数据是包含body的，也就是说请求的方法一般是`POST`）
 - 返回一个Response
 
 Response:
 - `resp.text`代表返回的内容的`str`，一般能根据响应头部来正确解码，用于文本数据；`resp.content`代表返回的二进制数据（即形式解码）
 - `resp.headers`响应头部
 - `resp.status_code`状态码
-- `resp.json`返回的json
+- `resp.json()`返回的json
 
 ### bs4.BeautifulSoup
 非常方便的HTML DOM解析
