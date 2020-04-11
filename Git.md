@@ -23,6 +23,14 @@ git fetch # 从远程仓库拉取
 git pull # 相当于git fetch + git merge
 git tag # 打标签
 ```
+### 配置
+`git config`命令用于处理配置
+```bash
+git config --list # 列出当前的配置
+git config [--global] user.name bbpumpkin # 将user.name的值配置为bbpumpkin，--global用于指定全局设置
+```
+每个仓库都必须要配置`user.name,user.email`，这两个选项用于指明每一个提交的作者及其email
+通常只需要在一台新机器上执行一次`git config --global`来配置这两个选项就可以自动应用到所有仓库的配置里面了
 ### 子模块（Submodule）功能
 子模块功能旨在在一个Git仓库里面引用另一个Git仓库，且便于Git版本控制。指令主要是`git submodule`系列。
 - 添加的Git仓库一定要是远程仓库，并拥有一个URL
@@ -39,6 +47,13 @@ Github优秀的软件开发协作机制。
 - 用户把项目fork到自己的名下，fork出来的仓库（分支）独立于原仓库，相当于复制了一份原来的仓库。
 - 在自己的fork下面提交了修改代码后，可以提交Pull Request
 相比于将修改直接merge到分支，Pull Request让代码的维护者可以进行Reiew，然后决定是否合并这一修改
+
+#### Github SSH支持
+Github支持通过SSH来访问远程仓库。
+- 预备：你需要一对公钥私钥
+- 添加：可以通过在Github的Settings里面添加公钥
+- 测试：`ssh -T git@github.com`，若返回结果显示“成功识别，但Github不支持shell服务“的提示信息说明配置成果
+- 使用：在clone时直接选择SSH链接，或者修改已有仓库的`remote.origin.url`为SSH URL，仓库就可以用SSH通信了，push不用输入用户和密码
 
 ### 远程仓库
 - 基于结合远程仓库以及本地库的Git的分布式机制是Git的重要特性之一（区别Subversion一类集中式仓库，必须经常下载远程仓库，且断网=停工）

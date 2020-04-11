@@ -13,12 +13,78 @@
      - 运行`manage.py collectstatic`
 2. 配置uwsgi
    - 编写配置文件（以ini配置文件为例）
-     （待完善）
+     一个实例：
+     ```ini
+     # mysite_uwsgi.ini file
+     [uwsgi]
+     # Django-related settings
+     # the base directory (full path)
+     chdir           = /home/ubuntu/mysite
+     module          = mysite.wsgi
+
+     # process-related settings
+     # eable master process
+     master          = True
+     # maximum number of worker processes
+     processes       = 10
+     # the socket (use the full path to be safe
+     socket          = /home/ubuntu/blogsite/blogsite.sock
+     # with appropriate permissions
+     # 664 may be more safe but user group config required
+     chmod-socket    = 666
+     # clear environment on exit
+     vacuum          = true
+
+     # save the pid of the master (for operating the uwsgi daemon)
+     pidfile = blogsite_uwsgi.pid
+
+     # set log
+     daemonize = blogsite_uwsgi.log
+     ```
    - 运行uwsgi（以ini配置文件为例）
-     `uwsgi --ini mysite_uwsgi.ini`
+     `uwsgi --ini blogsite_uwsgi.ini`
+     后台运行：
+     `uwsgi -d --ini blogsite_uwsgi.ini`
+     停止服务：
+     `uwsgi --stop blogsite_uwsgi.pid`
 3. 配置Nginx
-   - 在`/etc/nginx/site-available`中编写`mysite.conf`
-     （待完善）
+   - 在`/etc/nginx/site-available`中编写`blogsite.conf`
+     ```nginx
+     # blogsite_nginx.conf
+
+     # the upstream component nginx needs to connect to
+     upstream django {
+        server unix:///home/ubuntu/blogsite/blogsite.sock; # for a file socket
+        # server 127.0.0.1:8001; # for a web port socket (we'll use this first)
+     }
+
+     # configuration of the server
+     server {
+        # the port your site will be served on
+        listen      8000;
+        # the domain name it will serve for
+        server_name 111.229.242.198; # substitute your machine's IP address or FQDN
+        charset     utf-8;
+
+        # max upload size
+        client_max_body_size 75M;   # adjust to taste
+
+        # Django media
+        location /media  {
+            alias /home/ubuntu/blogsite/media;  # your Django project's media files - amend as required
+        }
+
+        location /static {
+            alias /home/ubuntu/blogsite/static; # your Django project's static files - amend as required
+        }
+
+        # Finally, send all non-media requests to the Django server.
+        location / {
+            uwsgi_pass  django;
+            include     /etc/nginx/uwsgi_params; # the uwsgi_params file you installed
+        }
+     }
+     ```
    - 链接到`/etc/nginx/site-enable`: `ln -s mysite.conf /etc/nginx/site-enable`
    - 检查配置文件是否正确： `sudo service nginx configtest`
    - 重启服务： `sudo service nginx restart`
