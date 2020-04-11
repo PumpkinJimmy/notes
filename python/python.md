@@ -164,19 +164,25 @@ Python标准库采用协程来实现异步。
 - `async def`用于定义一个协程
   - 语法就是在普通函数定义的`def`前面加上`async`关键字
   - 定义为协程的“函数”调用以后返回一个协程对象（coroutine），协程对象的接口类似生成器，调用`send(None)`唤醒协程，协程运行结束时会抛出`StopIteration`异常
-- `await`只在使用了`async def`的块中有效，其后要跟一个`Awaitable`，一般就是一个协程对象。关键字的作用是调用协程，等待协程运行结束返回结果。但这一等待是异步的，也就是可以挂起切换出去，在那个协程运行结束之后再切回来。其行为与以前的`yield from`相同
+- `await`只在使用了`async def`的块中有效，其后要跟一个`Awaitable`，可以是一个协程对象、或是`Task/Future`。关键字的作用是调用协程（如果是一个协程），等待协程运行结束返回结果。但这一等待是异步的，也就是可以挂起切换出去，在那个协程运行结束之后再切回来。其行为与以前的`yield from`相同
 只有这几个关键字还不够，使用协程还必须有`asyncio`提供的基础设施。
 #### asyncio高级API
 ```python
-Task # 一个类似Future的高层对象，不需要手动创建
-sleep(delay) # 非阻塞休眠
+Future # 一个低级对象，awaitable，await future相当于等待协程结束并返回future.result()
+Task # 一个包装了Future的高层对象，awaitable，行为同Future
+
 run(coro) # 创建一个事件循环并启动一个协程（一般用于main()之类的）
-create_task(coro) # 将协程打包为Task并立刻执行，返回Task对象，不阻塞，可用于并发
+create_task(coro) # 将协程打包为Task并立刻启动协程，返回Task对象，不阻塞，可用于并发
+
+### 以下函数都不阻塞，返回的都是协程，在await/create_task之前协程都是未启动的，真正的返回值都要await获取
+sleep(delay) # 非阻塞休眠
 ensure_future # 同create_task，Python3.7之前
-wait_for(aw, timeout=None) # 阻塞等待aw结束，若触发超时则抛出asyncio.TimeoutError并cancel掉aw
-gather(*aws) # （注意星号）并发运行协程，不阻塞，返回一个future，future.result()就是协程返回结果的序列了
-wait(aws, timeout=None) # 并发运行aws中的协程，阻塞等待至结束或超时。区别wait_for，不会抛出异常，也不会中断协程
-as_completed(aws) # 并发运行aws中的协程，不阻塞，返回一个Future生成器，生成器按出结果的顺序一路生成已经出结果的协程（也就是要await一下得到最终结果，迷惑）
+wait_for(aw, timeout) # 等待aw结束，若触发超时则抛出asyncio.TimeoutError并cancel掉aw
+gather(*aws) # （注意星号）并发运行协程并等待结束，返回结果的序列
+wait(aws, timeout=None) # 并发运行aws中的协程，等待至结束或超时。区别wait_for，不会抛出异常，也不会中断协程。返回两个集合：done和pending，分别放置了超时时已完成和未完成的Task
+###
+
+as_completed(aws) # 不阻塞，返回一个生成器，所有协程在第一次next后并发运行，每次next该生成器按协程结束的顺序生成已经出结果的协程（next时会阻塞等待）（也就是要await一下得到最终结果）
 ```
 #### asyncio低级API
 - `asyncio.get_event_loop()`返回一个事件循环，它相当于异步程序的引擎（或者说Reactor）
