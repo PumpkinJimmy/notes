@@ -38,6 +38,7 @@ time用传统的C风格函数处理时间
 
 ### shutil
 高级的文件管理操作库与系统调用库
+
 ### Anaconda
 约等于Python + 一堆Data Analysis的库 + virtualenv的发行版
 这个发行版很全很好用，有GUI界面，也可以用conda在命令行管理
@@ -58,11 +59,13 @@ time用传统的C风格函数处理时间
 - str是Unicode串，每一个字符占4字节，用于统一处理多字节字符，是等长编码的串；bytes是字节序列，1字符1字节
 - str专用于处理字符数据；bytes不一定用来处理字符数据，它既可以是经过gbk/utf-8编码的多字节变长字符序列，也可以是一般的二进制数据
 - str下标访问得到的是**长度为一的str**，bytes下标访问得到的是**整数**
+
 ### open的换行处理
 不同平台上的换行符各不相同（`\n, \r\n, \r`），Python open使用newline关键字参数来指定行为
 注意：所有讨论都基于文本模式打开文件（二进制模式不对换行符做处理）
 - `newline=None` 默认设置，自动根据平台处理，输入时统一为`\n`，输出时相应地对`\n`转换（即Windows下会转换成`\r\n`）
 - `newline=''` 自动根据平台进行分行，但不做处理地返回换行符 
+
 ### csv
 标准库csv模块提供轻量级的csv文件读写功能
 
@@ -87,14 +90,14 @@ with open("mycsv.csv", newline='') as f: # 防止换行符被转换
 
 ### shelve
 如果不像用复杂的SQL数据库，`shelve`是个持久化数据的好选择
-### QuickStart
+#### QuickStart
 ```python
 shelf = shelve.open("my.db")
 shelf['name'] = bbpumpkin # 储存
 print(shelf['name']) # 访问
 shelf.close() # 关闭
 ```
-### 说明
+#### 说明
 - `shelve.open`
   - `shelve.open`返回`Shelf`一个对象，`Shelf`是一个类字典对象，支持基本的字典操作
   - `shelve.open`可以指定`flag=`
@@ -113,3 +116,101 @@ shelf.close() # 关闭
 - `writeback`指明了Shelf的行为
   - 若`writeback=False`（默认），则每次设置键值时都写入文件，但无法处理mutable字典值的内部修改
   - 若`writeback=True`，则整个Shelf字典保存在内存，所有修改都可以进行，但必须显式调用`shelf.sync()/shelf.close()`才会保存到文件，且每次都写入整个字典（由于不知道改了哪里），导致保存不及时，以及占用内存多，关闭慢
+
+### logging
+标准日志模块，提供灵活的多级别的线程安全的日记记录功能。
+核心类层次：`Logger->Handler->Formatter`
+`Logger`就是日志记录器，包含`info(), warning()`等方法共记录日志。
+一个`Logger`可拥有多个`Handler`，每个`Handler`可以有自己的记录level，自己的输出，自己的格式（也就是`Formatter` ），`Formatter`用于指定记录的格式
+常用等级：
+- debug
+- info
+- warning
+- error
+- critical
+常用符号：
+- `%(levelno)s`: 打印日志级别的数值
+- `%(levelname)s`: 打印日志级别名称
+- `%(pathname)s`: 打印当前执行程序的路径，其实就是`sys.argv[0]`
+- `%(filename)s`: 打印当前执行程序名
+- `%(funcName)s`: 打印日志的当前函数
+- `%(lineno)d`: 打印日志的当前行号
+- `%(asctime)s`: 打印日志的时间
+- `%(thread)d`: 打印线程ID
+- `%(threadName)s`: 打印线程名称
+- `%(process)d`: 打印进程ID
+- `%(message)s`: 打印日志信息
+- `%()`格式可以用于自定义的字段以及类型，只要在log时传入一个字典到关键字参数extra
+注意区分`logging.Logger`与`logging.getLogger`：
+- 前者新建一个给定名字的`Logger`
+- 后者获取一个给定名字的`Logger`，若不存在则新建，若不提供名字则返还根Logger，且**多次使用同一个名字`getLogger`得到同一个Logger**，而自己新建则没有这样的效果
+
+### Python异步编程
+#### Quick Start
+```python
+import asyncio
+async def mytask(tid): # 定义协程
+    print(f"Task{tid} start")
+    await asyncio.sleep(2)
+    print(f"Task{tid} finish")
+
+loop = asyncio.get_event_loop() # 获得异步调用的事件循环
+loop.run_until_complete(asyncio.wait([mytask(i) for i in range(1, 6)])) # 调用协程并等待结束
+```
+
+#### 基础
+Python标准库采用协程来实现异步。
+在早期Python中使用生成器、yield和yield from关键字可以实现简单的异步编程。这是由于在生成器使用yield时生成器会挂起等待下一次`next(generator)/generator.send()`的调用来唤醒。这一机制正是实现协程所需要的。Python给出了asyncio库实现基本的异步组件。Python3.5后陆续加入关键字`async def` `await`以及`async for` `async yield` `async with` `__aite__` `__await__` 等特性来提供异步编程的语言级支持
+- `async def`用于定义一个协程
+  - 语法就是在普通函数定义的`def`前面加上`async`关键字
+  - 定义为协程的“函数”调用以后返回一个协程对象（coroutine），协程对象的接口类似生成器，调用`send(None)`唤醒协程，协程运行结束时会抛出`StopIteration`异常
+- `await`只在使用了`async def`的块中有效，其后要跟一个`Awaitable`，可以是一个协程对象、或是`Task/Future`。关键字的作用是调用协程（如果是一个协程），等待协程运行结束返回结果。但这一等待是异步的，也就是可以挂起切换出去，在那个协程运行结束之后再切回来。其行为与以前的`yield from`相同
+只有这几个关键字还不够，使用协程还必须有`asyncio`提供的基础设施。
+#### asyncio高级API
+```python
+Future # 一个低级对象，awaitable，await future相当于等待协程结束并返回future.result()
+Task # 一个包装了Future的高层对象，awaitable，行为同Future
+
+run(coro) # 创建一个事件循环并启动一个协程（一般用于main()之类的）
+create_task(coro) # 将协程打包为Task并立刻启动协程，返回Task对象，不阻塞，可用于并发
+
+### 以下函数都不阻塞，返回的都是协程，在await/create_task之前协程都是未启动的，真正的返回值都要await获取
+sleep(delay) # 非阻塞休眠
+ensure_future # 同create_task，Python3.7之前
+wait_for(aw, timeout) # 等待aw结束，若触发超时则抛出asyncio.TimeoutError并cancel掉aw
+gather(*aws) # （注意星号）并发运行协程并等待结束，返回结果的序列
+wait(aws, timeout=None) # 并发运行aws中的协程，等待至结束或超时。区别wait_for，不会抛出异常，也不会中断协程。返回两个集合：done和pending，分别放置了超时时已完成和未完成的Task
+###
+
+as_completed(aws) # 不阻塞，返回一个生成器，所有协程在第一次next后并发运行，每次next该生成器按协程结束的顺序生成已经出结果的协程（next时会阻塞等待）（也就是要await一下得到最终结果）
+```
+#### asyncio低级API
+- `asyncio.get_event_loop()`返回一个事件循环，它相当于异步程序的引擎（或者说Reactor）
+- `loop.run_until_complete(coroutine)`用于运行一个协程，返回结果。为了并发多个协程，通常要配合`asyncio.wait`
+（待完善）
+
+### 描述符（descriptor）
+Python描述符是一类特殊对象，其类通过定义`__get__` `__set__` `__delete__`三个特殊方法来修改默认的访问行为
+### Quick Start
+```python
+class MyDescriptor:
+  def __init__(self, name):
+    self.name = name
+  def __get__(self, obj, objtype):
+    return self.name
+  def __set__(self, obj, val):
+    self.name = val
+
+class MyClass:
+  dspr = MyDescriptor('d')
+
+o = MyClass()
+o.dspr # 'd'
+o.dspr = 'd2' # dspr.name = 'd2'
+```
+### 说明
+- 描述符只有在绑定为类的成员而不是具体对象的成员时才能工作
+- 描述符协议属于比较底层的机制，旨在简化底层C代码，并未Python提供新机制
+- 实际上`property,staticmethod,super`都是基于描述符协议的
+- 描述符跟元类一样属于“黑魔法”，谨慎使用
+- 某种程度上可以与元类协作（比如Django ORM？）

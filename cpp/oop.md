@@ -55,6 +55,19 @@ static在类里面用于声明静态类成员与静态成员函数。
 - 移动语义的引入带来了两个特殊方法（它们都有默认实现）：移动构造函数
 - C++标准库普遍实现了移动语义
 - `std::move`等价于`static_cast<T&&>`，用于将一个左值强制转换成右值引用，实现强制移动语义
+- 注意：尽管将形参声明为右值引用，但参数实际上的类型是*左值引用*，也就是说必须强制移动（`std::move`），例如：
+  ```cpp
+  void b(const int& x){
+    "Copy semantics";
+  }
+  void b(int&& x){
+    "Move semantics";
+  }
+  void a(int&& x){
+    b(x); // Copy
+    b(std::move(x)) // Move
+  }
+  ```
 
 ### Range-based For
 形如
