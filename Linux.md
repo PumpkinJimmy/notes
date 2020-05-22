@@ -98,7 +98,7 @@ SFTP是基于SSH通信的FTP服务器，其通用性使得它支持多种客户�
 - POSIX规定文件描述符0,1,2对应stdin,stdout,stderr
 
 ### fork
-### Quick Start
+#### Quick Start
 ```cpp
 #include <unistd.h>
 #include <stdio.h>
@@ -128,7 +128,7 @@ int main ()
     */
 }  
 ```
-### 入门
+#### 入门
 fork是Linux特有的多进程API
 - 调用fork之前，只有一个进程在执行代码
 - 调用fork后，两个代码相同、数据相同但不共享内存空间的独立进程同时从fork位置开始继续运行（如同平行宇宙）
