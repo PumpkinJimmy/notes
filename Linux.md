@@ -94,3 +94,43 @@ SFTP是基于SSH通信的FTP服务器，其通用性使得它支持多种客户�
 3. 检查是否成功
    
    `df | grep sdb`
+- 多个进程可以共享相同的文件描述符，且文件描述符具有类似引用计数的机制：只有当不存在拥有该文件描述符的进程时该文件描述符才会回收。
+- POSIX规定文件描述符0,1,2对应stdin,stdout,stderr
+
+### fork
+### Quick Start
+```cpp
+#include <unistd.h>
+#include <stdio.h>
+int main ()   
+{   
+    pid_t fpid; //fpid表示fork函数返回的值  
+    int count=0;  
+    fpid=fork();   
+    if (fpid < 0)   
+        printf("error in fork!");   
+    else if (fpid == 0) {  
+        printf("i am the child process, my process id is %d/n",getpid());   
+        count++;  
+    }  
+    else {  
+        printf("i am the parent process, my process id is %d/n",getpid());   
+        count++;  
+    }  
+    printf("Result: %d/n",count);  
+    return 0;
+    /*
+    运行结果
+    i am the child process, my process id is 5574
+    Result: 1
+    i am the parent process, my process id is 5573
+    Result: 1
+    */
+}  
+```
+### 入门
+fork是Linux特有的多进程API
+- 调用fork之前，只有一个进程在执行代码
+- 调用fork后，两个代码相同、数据相同但不共享内存空间的独立进程同时从fork位置开始继续运行（如同平行宇宙）
+- 主动调用fork的原始进程称为父进程，分出来的新进程称为子进程
+- fork的特殊之处在于看上去只执行了一次，但返回“两次”，父进程中fork返回fork出来的进程的id，子进程中fork返回0.当fork出错时fork返回负数
