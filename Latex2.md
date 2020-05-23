@@ -96,6 +96,7 @@
   - `\frac{a}{b}`: $\frac{a}{b}$
   - `\sqrt{a+b}`: $\sqrt{a+b}$
 - 空格：`\quad`
+- 上方标记: `\overset{ }{AB}`，第一个大括号内填上方的东西，比如`\frown`得到弧AB的符号
 - 矩阵，行列式：
   ```latex
   \left| \begin{array}{cccc}
