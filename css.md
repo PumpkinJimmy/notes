@@ -101,10 +101,16 @@ Flex布局的CSS属性：
 - `flex-direction` flex容器属性，指定主轴方向，常用的就是`row` `column`
 - `justify-content` flex容器属性，指定主轴上元素的对齐方案
   - `flex-start` 左对齐，后面不留间隔地排；`flex-end` 类似，只是右对齐
-  - `center` 局中
+  - `center` 居中
   - `space-between` 两端对齐（首元素置于其实位置，末元素置于结束位置），然后将剩余空间平均分到元素之间。这个方案很适合占满容器宽度的双列表格
   - `space-evenly` `space-around` 都是将剩余空间分配到元素之间、以及首元素与首位置之间、末元素与末位置之间，但比例不同。这两个方案很适合将等宽的元素平铺开来的情形
   - 注意到`justify-content`系列都是分配剩余空间到元素之间，但如果flex元素设置了空间配比的属性，则可能*没有剩余空间*，则这五个属性没有区别
+- `align-items` flex容器属性，指定元素在交叉轴上的对齐方案
+  - `flex-start` `flex-end` 
+  - `center` 局中（常用）
+- `flex-grow` flex元素属性，指定元素分配剩余空间的配比
+  - 默认值是0，表示参与不分配
+  - 指定正整数表示分得比例，例如：所有元素都是1则大家均分剩余的空间
   
 注：
 - *主轴*指的是元素在用其中排列的方向，*交叉轴*指的是与主轴垂直的轴；主轴可以是水平或垂直，可以多行，可以反向
@@ -113,5 +119,37 @@ Flex布局的CSS属性：
 - *不留间隔*指的是元素的**盒模型之间不留间隔**，不是说元素与元素之间没有内外边距
 - flex容器操作的直接对象是其*元素盒模型及位置*，如果布局结果中元素盒模型不能合理地容纳元素的子元素，则元素的子元素可能出框
 
-#### 常用应用
-除了均分
+#### 妙用
+均分：
+```css
+.container{
+  display: flex;
+}
+.item{
+  flex-grow: 1;
+}
+```
+
+水平居中且垂直居中
+```css
+.container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+```
+
+主题元素分得所有剩余空间
+```css
+.container{
+  display: flex;
+  flex-direction: column;
+}
+
+.header{
+  height: 20%;
+}
+.main{
+  flex-grow: 1;
+}
+```
