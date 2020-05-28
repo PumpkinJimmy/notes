@@ -39,9 +39,13 @@
   - display: table-cell; vertical-align:middle 通用的行内垂直居中（如图片）
 - 引用远程字体：@font-face
 - `:before``:after`伪类选择器可以配合`content`属性插入内容
+
 ### 坑点
-常见坑点:
-- width属性对应**内容区**的宽度而非框的宽度（即不含内边距）
+常见坑
+- 默认情况下，width/height属性对应**内容区**的尺寸而非框的尺寸（即不含内边距）
+- `keyframe`的初始样式和结束样式都是暂时的，只要动画播放完，元素的样式会回归原来的样子。故如果要动画结束后停留在结束样式，必需相应用js修改元素的样式。
+- `display`属性不可以应用过渡动画
+
 ### Font Awesome
 一个简单易用的图标库。原理是自定义字体+CSS。
 
@@ -186,3 +190,6 @@ Flex元素属性：
   flex-shrink: 0;
 }
 ```
+
+### box-sizing
+`box-sizing`属性旨在解决传统CSS盒模型尺寸设置的困境：`width` `height`设置的是*内容区*的宽度，而内容区的宽度是不含内边距的，没有合适的方法直接指定盒子的尺寸——在需要使用边框和背景色的元素上问题尤为明显。通过指定`box-sizing: border-box`，`width` `height` 可以指定元素的盒子尺寸
