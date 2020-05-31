@@ -68,10 +68,10 @@
   - 某些特殊写法如`\varphi`:$\varphi$
 
 - 二元运算符：
-  - `\times`:$\times$; `\div`: $\div$
+  - `\times`:$\times$; `\div`: $\div$; `\cdot`: $\cdot$
   - `\ge`: $\ge$; `\le`: $\le$; `\approx` :$\approx$;`\ne`: $\ne$; `\propto`: $\propto$; `\sim`: $\sim$
   - `\pm`: $\pm$; `\mp`: $\mp$
-  - 
+  - 大的横式除号:`\middle/`
   - `\overline{A}`: $\overline{A}$
 - 集合：
   - `\in`: $\in$; `\not\in`: $\not\in$
@@ -80,6 +80,9 @@
   - `\cap`: $\cap$; `\cup`: $\cup$
   - `\empty`:$\empty$; `\varbnothing`:好看的空集号
   - `\bigcap`:$\bigcap$；`\bigcup`:$\bigcup$
+- 定界符号
+  - `\{[()]\]`: $\{[()]\}$ （注意大括号转义）
+  - `\left/\right` + 定界符号：自适应大小的定界符号
 - 累计符号:
   - `\sum_{i=1}^{n}`:$\sum_{i=1}^{n}$
   - `\sum\limits_{i=1}^{n}`:$\sum\limits_{i=1}^{n}$
@@ -88,6 +91,7 @@
   - 所有大符号都可以通过加`\limits`来把下标转成正确的格式
   - `\lim`: $\lim_{x \to \infty}$：
   - `\int`: $\int_{a}^{b}$;
+  - `\oint`: $\oint$
   - `\iint`: $\iint$；通过`\limts`加上积分限
   - 微分符号`\mathrm{d}x`: $\mathrm{d}x$（之所以这么麻烦是因为数学环境默认将字母渲染为斜体，但标准的微分里的"d"是非斜体的）
   - `\partial x`: $\partial x$
@@ -96,6 +100,7 @@
   - `\frac{a}{b}`: $\frac{a}{b}$
   - `\sqrt{a+b}`: $\sqrt{a+b}$
 - 空格：`\quad`
+- 上方标记: `\overset{ }{AB}`，第一个大括号内填上方的东西，比如`\frown`得到弧AB的符号
 - 矩阵，行列式：
   ```latex
   \left| \begin{array}{cccc}
@@ -112,3 +117,8 @@
   本质上，这是因为Latex数学模式将`sin`认定为三个代数字母，故为斜体且与无视空格后面的字母紧密连接（认为是一个因式）；而加了斜杠以后`\sin`是一个控制序列，其有了合理的排版特性，且可以使用花括号记法如`\sin{AC}`：$\sin{AC}$
 
   因尽量使用`\sin`这样的*控制序列*而不是`sin`这样的*字母*
+
+- `\text`允许在数学环境里面插入普通模式下的字符,使用场景包括:
+  - 不需要标注斜体的字母,如dx中的d
+  - 物理上的单位
+  - 中文
