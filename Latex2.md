@@ -71,7 +71,7 @@
   - `\times`:$\times$; `\div`: $\div$; `\cdot`: $\cdot$
   - `\ge`: $\ge$; `\le`: $\le$; `\approx` :$\approx$;`\ne`: $\ne$; `\propto`: $\propto$; `\sim`: $\sim$
   - `\pm`: $\pm$; `\mp`: $\mp$
-  - 大的横式除号:`\middle/`
+  - 大的横式除号:`\left. \middle/ \right.` 注意：左右的left/right是必须的，`.`是占位的，不表示具体定界符号
   - `\overline{A}`: $\overline{A}$
 - 集合：
   - `\in`: $\in$; `\not\in`: $\not\in$
