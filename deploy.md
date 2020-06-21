@@ -7,11 +7,13 @@
 #### 步骤
 1. 配置Django
    - 在`settings.py`中关闭Debug模式
+   - 在`settings.py`中设置`ALLOW_HOST`来允许反向代理
    - 收集静态文件
      - 开发阶段，静态文件请求由Django测试服务器处理；在生产环境中，静态文件交给Nginx处理，故需要收集静态文件到合适的位置
      - 先在`settings.py`中设置`STATIC_ROOT`，指定静态文件存放的位置
      - 运行`manage.py collectstatic`
 2. 配置uwsgi
+   - 安装uwsgi的python插件：`sudo apt install uwsgi-plugin-python3`
    - 编写配置文件（以ini配置文件为例）
      一个实例：
      ```ini
@@ -40,6 +42,9 @@
 
      # set log
      daemonize = blogsite_uwsgi.log
+
+     # python plugin
+     plugins = python3
      ```
    - 运行uwsgi（以ini配置文件为例）
      `uwsgi --ini blogsite_uwsgi.ini`
@@ -47,6 +52,8 @@
      `uwsgi -d --ini blogsite_uwsgi.ini`
      停止服务：
      `uwsgi --stop blogsite_uwsgi.pid`
+     重载：
+     `uwsgi --reload blogsite_uwsgi.pid`
 3. 配置Nginx
    - 在`/etc/nginx/site-available`中编写`blogsite.conf`
      ```nginx
@@ -85,6 +92,6 @@
         }
      }
      ```
-   - 链接到`/etc/nginx/site-enable`: `ln -s mysite.conf /etc/nginx/site-enable`
+   - 链接到`/etc/nginx/site-enable`: `ln -s mysite.conf /etc/nginx/site-enable`（必须用绝对路径）
    - 检查配置文件是否正确： `sudo service nginx configtest`
    - 重启服务： `sudo service nginx restart`

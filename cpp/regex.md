@@ -27,3 +27,4 @@ for (const auto &fname : fnames) {
   - 下标访问匹配组的信息：`m[0], m[1], ...`
   - `match_result.str()`返回匹配的内容，`match_result.first/second`表示匹配内容的迭代器
 - `regex_iterator`：迭代器，访问每个匹配模式的串（相当于findall）
+- 区别`regex_match`和`regex_search`：前者需要**完整匹配（从头匹到尾，后者只需要匹到就好）

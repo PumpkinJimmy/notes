@@ -214,3 +214,24 @@ o.dspr = 'd2' # dspr.name = 'd2'
 - 实际上`property,staticmethod,super`都是基于描述符协议的
 - 描述符跟元类一样属于“黑魔法”，谨慎使用
 - 某种程度上可以与元类协作（比如Django ORM？）
+
+### `code`对象
+以下四类对象内部存在一个code对象
+- 函数
+- 模块
+- 类
+- 生成器表达式
+使用以函数为例，使用`func.__code__`访问
+code对象的常用属性：
+- `co_argcount` 参数个数，含self，不含`*args,**kwargs`
+- `co_names` 局部变量名称
+
+### json
+- `dump` `dumps` `load` `loads` 顾名思义
+- 关于中文：
+  
+  `dump/dumps`的关键字参数`ensure_ascii=True`（默认值）保证了编码得到的json文本一定是ascii字符集的。
+
+  若被编码的对象包含超ascii的字符（比如中文），就会采用JavaScript的Unicode转义记号表示，类似`\\uxxxx`这样的码，非常不便于直接阅读修改，故可以设置`ensure_ascii=False`解决
+
+- json模块的字符串必须是`str`而非`bytes`，如果`str`的结果是
