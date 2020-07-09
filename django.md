@@ -62,3 +62,18 @@ Django自带的用户验证系统。
 
 ### ManyToMany Field
 `M.mtm.add()` 向ManyToMany字段添加对象
+
+### CSRF
+POST的时候永远遇得到的问题。
+启用CSRF防御的方法：
+- 全局中间件（默认已安装）
+- 对个别view：`django.views.decorators.csrf.csrf_protect`装饰器
+
+由于Django默认安装防CSRF中间件，如果不正确提交`csrf_token`，那Django就会给出403 Forbidden，正确处理方法如下：
+- 通用：
+  1. 全局：移除相应中间件
+  2. 针对单个个别视图：`django.views.decorators.csrf.csrf_exempt`装饰器，使被装饰的view不处理CSRF
+- 常规网页请求：（待完善）
+- Ajax/其他前端提交
+  - 正常思路是捕获存在cookie里的`csrf_token`，然后返回时捎带上这个值
+  - 特殊的，比如提供一个HTTP API，只能使用`csrf_exempt`或者移除中间件。
