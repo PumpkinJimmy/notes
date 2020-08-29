@@ -119,31 +119,49 @@ shelf.close() # 关闭
 
 ### logging
 标准日志模块，提供灵活的多级别的线程安全的日记记录功能。
-核心类层次：`Logger->Handler->Formatter`
-`Logger`就是日志记录器，包含`info(), warning()`等方法共记录日志。
-一个`Logger`可拥有多个`Handler`，每个`Handler`可以有自己的记录level，自己的输出，自己的格式（也就是`Formatter` ），`Formatter`用于指定记录的格式
-常用等级：
-- debug
-- info
-- warning
-- error
-- critical
-常用符号：
-- `%(levelno)s`: 打印日志级别的数值
-- `%(levelname)s`: 打印日志级别名称
-- `%(pathname)s`: 打印当前执行程序的路径，其实就是`sys.argv[0]`
-- `%(filename)s`: 打印当前执行程序名
-- `%(funcName)s`: 打印日志的当前函数
-- `%(lineno)d`: 打印日志的当前行号
-- `%(asctime)s`: 打印日志的时间
-- `%(thread)d`: 打印线程ID
-- `%(threadName)s`: 打印线程名称
-- `%(process)d`: 打印进程ID
-- `%(message)s`: 打印日志信息
-- `%()`格式可以用于自定义的字段以及类型，只要在log时传入一个字典到关键字参数extra
-注意区分`logging.Logger`与`logging.getLogger`：
-- 前者新建一个给定名字的`Logger`
-- 后者获取一个给定名字的`Logger`，若不存在则新建，若不提供名字则返还根Logger，且**多次使用同一个名字`getLogger`得到同一个Logger**，而自己新建则没有这样的效果
+1. 核心类层次：`Logger->Handler->Formatter`
+   
+   `Logger`就是日志记录器，包含`info(), warning()`等方法供记录日志。
+
+   一个`Logger`可拥有多个`Handler`，每个`Handler`可以有自己的记录level。每个`Handler`有一个`Formatter`。`Formatter`用于指定记录的格式
+
+2. 常用Handler：
+- `StreamHandler` 输出到流，常用于输出到标准输出等。默认是输出到stderr
+- `FileHandler` 输出到文件
+- `RotatingFileHandler` 滚动文件日志（超出最大日志大小后把旧的日志顶掉，可以设置备份）
+- `SocketHandler/HTTPHandler` 支持套接字/HTTP协议的网络日志
+
+3. 常用等级：
+   - debug
+   - info
+   - warning
+   - error
+   - critical
+
+4. 常用Format符号：
+   - `%(levelno)s`: 打印日志级别的数值
+   - `%(levelname)s`: 打印日志级别名称
+   - `%(pathname)s`: 打印当前执行程序的路径，其实就是`sys.argv[0]`
+   - `%(filename)s`: 打印当前执行程序名
+   - `%(funcName)s`: 打印日志的当前函数
+   - `%(lineno)d`: 打印日志的当前行号
+   - `%(asctime)s`: 打印日志的时间
+   - `%(thread)d`: 打印线程ID
+   - `%(threadName)s`: 打印线程名称
+   - `%(process)d`: 打印进程ID
+   - `%(name)s`: 打印Logger的名称
+   - `%(message)s`: 打印日志信息
+   - `%()`格式可以用于自定义的字段以及类型，只要在log时传入一个字典到关键字参数extra
+5. 其他
+   - 注意区分`logging.Logger`与`logging.getLogger`：
+     - 前者新建一个给定名字的`Logger`
+     - 后者获取一个给定名字的`Logger`，若不存在则新建，若不提供名字则返还根Logger，且**多次使用同一个名字`getLogger`得到同一个Logger**，而自己新建则没有这样的效果
+   - 多次调用`Logger.addHandler`添加同一个Handler的行为会导致日志记录重复
+   - **（坑）**考虑到`getLogger`获取日志的同一性，以及重复添加Handler的行为，再考虑到可能的多线程工作，有如下结论：
+     
+     使用`Logger`而非`getLogger`。
+
+     如无必要，不要使用`getLogger`获取指定名称的Logger并初始化，这会导致重复初始化Logger，重复日志
 
 ### Python异步编程
 #### Quick Start
@@ -191,7 +209,7 @@ as_completed(aws) # 不阻塞，返回一个生成器，所有协程在第一次
 
 ### 描述符（descriptor）
 Python描述符是一类特殊对象，其类通过定义`__get__` `__set__` `__delete__`三个特殊方法来修改默认的访问行为
-### Quick Start
+#### Quick Start
 ```python
 class MyDescriptor:
   def __init__(self, name):
@@ -208,7 +226,7 @@ o = MyClass()
 o.dspr # 'd'
 o.dspr = 'd2' # dspr.name = 'd2'
 ```
-### 说明
+#### 说明
 - 描述符只有在绑定为类的成员而不是具体对象的成员时才能工作
 - 描述符协议属于比较底层的机制，旨在简化底层C代码，并未Python提供新机制
 - 实际上`property,staticmethod,super`都是基于描述符协议的
@@ -328,8 +346,10 @@ code对象的常用属性：
      也即`__init__.py`无需做额外处理，客户代码使用时采用`import package.module`的形式单独导入特定子模楷
 
      此法的优点是用多少导入多少，缺点是麻烦
-
-3. 相对路径导入
+3. `from import` 导入
+   - 可以用于从package中导入module或subpackage
+   - 不论模块是否已经导入，必定重新载入
+4. 相对路径导入
    
    在组织一个完整的package时，直接import是不可取的。这是因为导入同一文件夹下的模块的行为依赖Python将当前路径导入搜索路径这一前提，在重用package时非常有可能出错。正确做法为：
 
@@ -344,7 +364,7 @@ code对象的常用属性：
 
    在最开始加一个点的记法就是相对路径导入，被省略的部分即使*当前package*
 
-4. importlib
+5. importlib
    
    标准库模块`importlib`提供了一系列灵活导入的工具。（主要用于交互式解释环境）
 

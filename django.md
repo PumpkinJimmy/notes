@@ -77,3 +77,17 @@ POST的时候永远遇得到的问题。
 - Ajax/其他前端提交
   - 正常思路是捕获存在cookie里的`csrf_token`，然后返回时捎带上这个值
   - 特殊的，比如提供一个HTTP API，只能使用`csrf_exempt`或者移除中间件。
+
+### Django日志
+Django使用标准的logging模块实现日志功能。
+
+使用settings配置来启用Django内置的Logger并记录信息
+
+（使用方法待完善）
+
+### 时区
+settings.TIME_ZONE用于设置时区
+
+注意，这一设定直接影响所有Django的时间显示（包括日志的时间）！
+
+一个常用时区：`"Asia/Shanghai"`

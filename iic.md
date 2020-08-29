@@ -29,3 +29,49 @@ $$
 ### 正确食用IIC论文的代码
 - 由于原代码基于过时的Python27和PyTorch0.4编写，需要手动适配Python3
 - 使用适当的Net类，再相应使用合适的参数load_state_dict（无需适配）以及适当的config（需要适配）
+
+### 从源码看IIC网络的训练
+以下结论来自源码
+- IIC网络结构
+  
+  IIC网络的结构分为“躯干”(trunk)和“头”(head)，其中trunk为VGGNet，head为一个全连接层后接一个Softmax。
+
+  注意一个“头”实际上可以是多个“子头”(sub head)的集合，他们的**构造一致但不共享参数**。
+  
+  故k个sub head的网络就有k个Softmax输出向量，有k个loss
+
+  在训练时，我们往往对**k个loss的平均值做反向传播**
+
+  在实际使用时，我们必须要从训练好的k个sub head里面选出一个最好的作为真正使用的sub head。
+
+
+- “双头”(two-head)IIC网络
+  
+  一个双头IIC网络拥有一个trunk和两个head。一般称为head A和head B。且**默认以head B为主head，即作为真正的网络的head**
+
+  两个head的联系：由于是同一个trunk，它们存在参数共享。
+
+  两个head的区别：尽管共享了trunk，但其sub head的参数不共享，且**它们可以拥有不同的输出维数**。因此两个head不能等同于两组sub head
+
+  在训练时，两个head当作两个参数共享的独立网路，它们一般是**交替训练，先B后A**的
+
+- 大致训练流程
+  
+  1. 确定当前训练的头（A/B）
+  2. 初始化一组dataloader，其中每个dataloader每次返回的样本都对应属于同一类（也即是同一张图变换而来）
+  3. 对每一组同类batch：
+     1. 计算其中第一组样本和其余组的样本的网络输出两两之间的IID loss
+     2. 对所有sub head的loss取平均得到avg loss
+     3. 对avg loss执行反向传播
+
+
+- 所谓lamb
+  
+  体现在代码中，lamb是一个调节网络训练的超参数。它会在计算IID_loss的时候在适当位置乘上这个参数
+
+  （作用待完善）
+
+- 所谓Sobel
+  
+  其实就是空间域滤波的Sobel算子，用于一阶导数边缘提取
+  
