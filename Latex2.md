@@ -76,7 +76,7 @@
 - 集合：
   - `\in`: $\in$; `\not\in`: $\not\in$
   - `\exist`: $\exist$; `\forall`: $\forall$
-  - `\subset`:$\subset$; `\subseteq`
+  - `\subset`:$\subset$; `\subseteq` $\subseteq$
   - `\cap`: $\cap$; `\cup`: $\cup$
   - `\empty`:$\empty$; `\varbnothing`:好看的空集号
   - `\bigcap`:$\bigcap$；`\bigcup`:$\bigcup$
