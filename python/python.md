@@ -371,3 +371,10 @@ code对象的常用属性：
    - `reload` 强制重载模块代码，重新导入。主要用于交互式环境。根据Python的import机制，已经导入的模块不会重复导入。但交互环境下可能会有已经导入模块被修改的情况。这时需要reload一下。
 
    - `import_module` 提供模块名字符串，导入模块
+
+### conda常用指令
+- conda create
+- conda activate
+- conda install
+- conda config
+（待完善）

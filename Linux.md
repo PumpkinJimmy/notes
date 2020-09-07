@@ -133,3 +133,64 @@ fork是Linux特有的多进程API
 - 调用fork后，两个代码相同、数据相同但不共享内存空间的独立进程同时从fork位置开始继续运行（如同平行宇宙）
 - 主动调用fork的原始进程称为父进程，分出来的新进程称为子进程
 - fork的特殊之处在于看上去只执行了一次，但返回“两次”，父进程中fork返回fork出来的进程的id，子进程中fork返回0.当fork出错时fork返回负数
+
+### 监视GPU资源
+英伟达自带nvidia-smi命令行工具显示GPU资源状况
+结合Linux命令`watch`，可以实施监视资源使用：
+`watch -n 10 nvidia-smi`
+
+### 查看系统资源
+```bash
+uname -a # 查看内核/操作系统/CPU信息 
+head -n 1 /etc/issue # 查看操作系统版本 
+cat /proc/cpuinfo # 查看CPU信息 
+hostname # 查看计算机名 
+lspci -tv # 列出所有PCI设备 
+lsusb -tv # 列出所有USB设备 
+lsmod # 列出加载的内核模块 
+env # 查看环境变量资源 
+free -m # 查看内存使用量和交换区使用量 
+df -h # 查看各分区使用情况 
+du -sh <目录名> # 查看指定目录的大小 
+grep MemTotal /proc/meminfo # 查看内存总量 
+grep MemFree /proc/meminfo # 查看空闲内存量 
+uptime # 查看系统运行时间、用户数、负载 
+cat /proc/loadavg # 查看系统负载磁盘和分区 
+mount | column -t # 查看挂接的分区状态 
+fdisk -l # 查看所有分区 
+swapon -s # 查看所有交换分区 
+hdparm -i /dev/hda # 查看磁盘参数(仅适用于IDE设备) 
+dmesg | grep IDE # 查看启动时IDE设备检测状况网络 
+ifconfig # 查看所有网络接口的属性 
+iptables -L # 查看防火墙设置 
+route -n # 查看路由表 
+netstat -lntp # 查看所有监听端口 
+netstat -antp # 查看所有已经建立的连接 
+netstat -s # 查看网络统计信息进程 
+ps -ef # 查看所有进程 
+top # 实时显示进程状态用户 
+w # 查看活动用户 
+id <用户名> # 查看指定用户信息 
+last # 查看用户登录日志 
+cut -d: -f1 /etc/passwd # 查看系统所有用户 
+cut -d: -f1 /etc/group # 查看系统所有组 
+crontab -l # 查看当前用户的计划任务服务 
+chkconfig –list # 列出所有系统服务 
+chkconfig –list | grep on # 列出所有启动的系统服务程序 
+rpm -qa # 查看所有安装的软件包
+```
+
+### 在后台运行程序
+除去添加为系统服务的方式，将程序挂在后台的标准操作：
+`nohup my_bg_program &`
+
+其中，`nohup`是一个Linux程序，可以重定向程序输出到一个叫`nohup.out`的文件中；
+`&`标记表明程序在后台运行；
+
+执行上述操作后，**程序在后台运行，不阻塞，且没有没有屏幕输出**。
+
+执行该命令后，返回进程的pid以便终止。
+
+使用`kill my_pid`终止进程。
+
+通常把pid记在一个`my_program.pid`的文件里面，或者使用`ps aux | grep my_program`搜索进程来管理

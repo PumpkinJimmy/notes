@@ -74,3 +74,27 @@ torch.optim提供了一堆优化算法类如SGD, AdaGrad, RMSProp, Adam
 
 ### 坑点
 - tensor数值运算对数据类型要求非常严格，两个相互运算的tensor很可能要求类型完全一致（甚至float和double都不行）
+
+### Dataloader
+来自`torch.utils.data.Dataloader`类用于从数据集载入batch
+- ```python
+  Dataloader(
+    dataset= # 数据集
+    batch_size= # batch大小
+    shuffle= # 是否打乱
+    num_worker= # 多线程载入（注意Windows下只能是0）
+  )
+  ```
+- `Dataloader`必须迭代使用。每次迭代返回一个2元素元组，分别是数据样本（一个大Tensor）和一个标签数组
+- `Dataloader`需配合`Dataset`使用。
+- `Dataset`类
+  - `torchvision.datasets`内置了许多常用数据集，如`MNIST`，也有方便的类如`ImageFolder`
+  - 自己写的话需要实现接口`__setitem__`，用于返回单条数据样本
+  - 传入`transform`参数来转换样本
+
+### 多GPU训练
+多GPU训练实质上是把一个大的batch均衡到各个GPU上进行计算，然后求出合梯度
+- 先把数据载进主GPU：`net.cuda()`
+- 然后再并行：`net = nn.DataParallel(net)`
+
+注意：DataParallel并行训练出来的模型也必须载入到DataParallel的网络里

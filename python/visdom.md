@@ -15,3 +15,8 @@ vis = visdom.Visdom(env="test1") # 指定环境名，相当于一个独立的上
 vis.line(X=x, Y=y, win='plot') # 相当于plt.plot
 vis.images(imgs, win='images') # 常用，批量显示图片
 ```
+
+### 动态更新
+可以为绘图函数添加`update="append"`关键字参数来高效更新图表
+
+注：这种方法必须指定`win=`
