@@ -51,8 +51,30 @@ torch.nn构建神经网络的核心是Module
   - MSELoss
   - BCELoss 二值交叉熵损失函数
   - CrossEntropyLoss 交叉熵损失函数（这个用起来可以干脆省掉写softmax，但要注意提供的类别tensor必须是long类型的）
-- Module.parameters()方法可以返回网络参数的生成器，可以用于开放给optim的算法进行操作
-- torch.save可以用来直接保存整个网络到文件
+
+- `Module.parameters()`方法可以返回网络参数的生成器，可以用于开放给optim的算法进行操作
+- `Module.modules()`方法获取网络下注册的所有模块
+- `Module.state_dict()`
+  
+  将module的所有参数保存为一个字典
+
+  其中字典的键名取决于submodule绑定到module的属性名
+- 区别`Sequence`和`ModuleList`
+  
+  前者将一个Module序列串成一个Module，获得一个将输入输出依次串联的Module
+
+  后者单纯地把一组Module有序收纳起来
+
+  使用`ModuleList`而不是`list`的理由：我们使用`Module.parameters/modules/state_dict`之类的方法时，下属的子模块必须要注册到父模块，这些方法才能工作。若不是直接把子模块绑定到父模块的属性上，就需要`ModuleList`来绑定了
+
+- 保存模型到文件：
+  
+  标准操作：
+  `torch.save(net.state_dict(), 'my_module.pth')`
+  - `Module.state_dict()`方法返回一个保存所有参数的字典
+  - `torch.save`相当于`pickle.dump`，可以直接把state_dict保存到文件。
+  
+  注1：可以用`torch.save`直接保存整个网络到文件，但考虑到*可移植性*（比如说把旧版PyTorch上训练的网络参数载入到新版的网络里边），使用`state_dict()`更佳
 
 ### torch.optim
 torch.optim提供了一堆优化算法类如SGD, AdaGrad, RMSProp, Adam

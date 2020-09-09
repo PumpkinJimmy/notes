@@ -378,3 +378,9 @@ code对象的常用属性：
 - conda install
 - conda config
 （待完善）
+
+### 为什么使用Anaconda
+- 多环境管理（常见于为了运行旧代码而搭建的旧环境）
+- 自带多个常用包
+- 有好用的清华源安装PyTorch
+- 自带python-dev
