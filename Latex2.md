@@ -51,6 +51,9 @@
 
 ### 文档结构基本
 （待完成）
+### 插入代码片段
+使用宏包`listings`来完成
+（待完善）
 ### 数学符号
 - 在数学环境里面，排版是根据符号之间的逻辑来自动进行的，所以渲染时会**忽略源码的空格，自动在适当位置添加空格**
 - 某些数学符号（尤其是一些大符号）需要amsmath宏包，强烈推荐使用
@@ -122,3 +125,33 @@
   - 不需要标注斜体的字母,如dx中的d
   - 物理上的单位
   - 中文
+
+### Latex机制详解
+#### class & package
+- *文档类(class)*文件以`.cls`结尾，使用`\documentclass`指定文档类
+- `.sty`文件为*package*，使用`\usepackage`引入package.注：一条usepackage可以引入多个package，用逗号分隔
+- 使用`\documentclass[<option>]{}` `\usepackage[<option>]{}`指定选项；一般来说，文档类的选项会自动应用到每一个package
+- 标准文档类（常用）：
+  - article
+  - book
+  - letter
+  - report
+  - slides
+  - minimal
+- ctex中文文档类：
+  - ctexart
+  - ctexrep
+  - ctexbook
+#### Tex安装文件夹结构
+- 通常称Tex的安装根目录为“texmf”；Windows下的MikTex一般就是安装文件的文件夹内的MikTex文件夹
+- texmf下的tex目录下会有许多文件夹。通常每个文件夹就是一组宏包，其中可能包含.sty/.cls/.def文件
+
+#### 安装宏包
+三种方法：
+1. 直接把需要的`.cls/.sty`文件放到被编译的tex文件的同一个目录下。这个方法通常用于应用某些特定期刊的模板。
+2. 使用自带的宏包管理器管理（Linxu TexLive下tlmgr命令，Windows MikTex下有Package Manager GUI）
+3. 手动安装：根据README的说明调用`latex xxx.ins`编译生成`.sty/.cls`文件，或者有Makefile的直接make，然后把文件夹放到正确的位置。
+
+通常还可以`latex xxx.dtx`生成文档
+
+**注意！** 在Windows MikTex下必须使用`Setting(Admin)`工具更新包索引信息才能识别出

@@ -95,3 +95,4 @@
    - 链接到`/etc/nginx/site-enable`: `ln -s mysite.conf /etc/nginx/site-enable`（必须用绝对路径）
    - 检查配置文件是否正确： `sudo service nginx configtest`
    - 重启服务： `sudo service nginx restart`
+   - **坑：** Nginx通过模块支持uwsgi的反向代理（比如说`uwsgi_pass`指令就是这个模块的）。它不是一般意义上的负载均衡反向代理服务器，也就是说`proxy_*`系列指令对此*不起作用*！

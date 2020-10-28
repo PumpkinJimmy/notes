@@ -38,6 +38,9 @@ time用传统的C风格函数处理时间
 
 ### shutil
 高级的文件管理操作库与系统调用库
+- `copy2(src,dst)` 把src文件拷到dst路径，dst可以是文件，也可以是目录
+- `rmtree(dir)` 删除整个目录
+
 
 ### Anaconda
 约等于Python + 一堆Data Analysis的库 + virtualenv的发行版
@@ -183,6 +186,7 @@ Python标准库采用协程来实现异步。
   - 语法就是在普通函数定义的`def`前面加上`async`关键字
   - 定义为协程的“函数”调用以后返回一个协程对象（coroutine），协程对象的接口类似生成器，调用`send(None)`唤醒协程，协程运行结束时会抛出`StopIteration`异常
 - `await`只在使用了`async def`的块中有效，其后要跟一个`Awaitable`，可以是一个协程对象、或是`Task/Future`。关键字的作用是调用协程（如果是一个协程），等待协程运行结束返回结果。但这一等待是异步的，也就是可以挂起切换出去，在那个协程运行结束之后再切回来。其行为与以前的`yield from`相同
+
 只有这几个关键字还不够，使用协程还必须有`asyncio`提供的基础设施。
 #### asyncio高级API
 ```python
@@ -349,6 +353,7 @@ code对象的常用属性：
 3. `from import` 导入
    - 可以用于从package中导入module或subpackage
    - 不论模块是否已经导入，必定重新载入
+
 4. 相对路径导入
    
    在组织一个完整的package时，直接import是不可取的。这是因为导入同一文件夹下的模块的行为依赖Python将当前路径导入搜索路径这一前提，在重用package时非常有可能出错。正确做法为：
@@ -363,6 +368,8 @@ code对象的常用属性：
    ```
 
    在最开始加一个点的记法就是相对路径导入，被省略的部分即使*当前package*
+
+   注1：必须注意当前`mod.py`文件运行的状态：当它作为主程序运行时它是`__main__`而不是`pkg`中的包，相对路径无效。**相对路径必须在`mod.py`以包的形式被导入时才能正常工作**，参见`__name__`属性的含义
 
 5. importlib
    
@@ -384,3 +391,11 @@ code对象的常用属性：
 - 自带多个常用包
 - 有好用的清华源安装PyTorch
 - 自带python-dev
+
+### 坑
+#### 多进程
+> The __main__ module must be importable by worker subprocesses. This means that ProcessPoolExecutor will not work in the interactive interpreter.
+
+对于Windows，多进程不能用在交互式解释器中跑
+
+但Linux由于神奇的fork机制，是可以的

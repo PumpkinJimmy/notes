@@ -9,3 +9,8 @@
 - `pageXOffset` `pageYOffset`
 ### 杂项
 - 获取计算出来的样式值：`getComputedStyle(ele)`，然后当作`ele.style`来使用就可以了
+
+### REST API 跨域访问
+- 通常我们会在JavaScript里面使用AJAX访问REST API，此时会涉及域名A下的JavaScript代码访问域名B下的API。这种行为被称为CORS(Cross Origin Resource Sharing)
+- 默认情况下CORS是**被禁止的**
+- API的提供者能通过在使用`Access-Control-Allow-Origin`头来指定哪些域名能跨域请求API资源

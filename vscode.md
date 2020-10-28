@@ -1,6 +1,7 @@
 ## VS Code 使用
 基本理念：这是一个现代的Vim，通过插件可以无限拓展其功能。
 相较于Vim，VSCode有GUI更好上手，方便调试。
+相较于一般的IDE，其大部分配置都依赖json文件配置，需要用户自己查文档写配置，门槛较高。
 VSCode的设置分为全局的设置和工作区的设置。工作区的设置放置在工作区的.vscode文件夹里。所有设置都写成JSON。
 - settings.json 保存VSCode设置
 - launch.json 保存启动程序的设置
@@ -23,5 +24,24 @@ VSCode的设置分为全局的设置和工作区的设置。工作区的设置�
   - `options`指明环境变量、工作目录等
   - `problemMatcher`指明问题匹配器，这个要指定现成的，否则要自定义
   - `dependOn` 指明前置要调用的Task，用这个可以组合多个Tasks用于构建工具链，详见文档
-- 可以使用`${}`使用预定义的变量，常用的有`${file}`，详见文档
+- 可以使用`${}`使用预定义的变量，常用的有:
+  - `${file}`当前文件
+  - `${workspaceFolder}`工作目录路劲
+  - `${fileBasename}`不含目录的文件名
+  - `${fileBasenameNoExstension}` 不含目录和拓展名的文件名
+  
+  详见文档
+
 - Tasks虽然功能是有限的，但适用面非常广泛（调用外部命令），可以用于build, test, runserver, clear, 调用make等
+
+### C++
+- Why C++ on VSCode
+  - Working on Linux Desktop (easier than Vim)
+  - 高度定制，可以适用于需要对拍之类的情形
+
+- Compile
+  
+  使用Task系统完成
+
+- Debug
+  （详见官方文档，非常详细）
