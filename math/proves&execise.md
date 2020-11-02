@@ -13,12 +13,44 @@
     设U = \bigcap_{u\in U_1} u,则U只含有限个点\\
     由覆盖定义，只存在有限个点属于S，推出矛盾
   $$
+- 致密性定理=>柯西收敛原理
+  
+  已知有界数列必有收敛子列，证明柯西收敛原理。
+
+  证：
+
+  先证必要性：
+  $$
+  
+  由点列极限的定义，\\
+  \lim P_n = P_0 \Rightarrow \\
+  r(P_m,P_n) \le r(P_m,P_0) + r(P_n,P_0) < \varepsilon/2 + \varepsilon / 2 = \varepsilon\\
+  必要性得证
+  $$
+  再证充分性：
+  $$
+    
+    由\forall p \in Z^+,r(P_{n+p},O) \le r(P_{n+p},P_n) + r(P_n,O) < \varepsilon + M_1\\
+    可知\{P_n\}有界\\
+    （其中M_1为P_1到P_n中距离远点最远的点的距离）\\
+  $$
+  故存在收敛子列$\{P_{n_k}\}$
+  $$
+    令\lim P_{n_k} = P_0,有：\\
+    \exists N_1 > 0, \forall n_k > N_1, r(P_{n_k},P_0)<\varepsilon/2\\
+    由柯西条件，有：\\
+    \exists N_2 > 0, \forall n,n_k >N_2, r(P_{n_k},P_n) < \varepsilon/2\\
+    令N = \max(N_1,N_2)，\forall n > N,有：\\
+    r(P_n,P_0) \le r(P_n,P_{n_k}) + r(P_{n_k},P_0)\\
+    < \varepsilon/2 + \varepsilon/2 = \varepsilon\\
+    也即\lim_{n\to\infty} P_n = P_0，充分性得证
+  $$
 ### 开闭集互补
 证明：开集的补集是闭集
 $$
     用反证法.设开集E的补集E^c不是闭集\\
     则\exists P \in E为E^c的极限点\\
-    则由开集定义，\forall \delta > 0,U(P,\delta) \subset E \\
+    则由开集定义，\exists \delta > 0,U(P,\delta) \subset E \\
     也即\exist \delta, U(P,\delta) \cap E^c = \phi\\
     与“P为E^c”聚点矛盾，原命题得证
 $$
@@ -34,18 +66,17 @@ $$
 ### 2. 有界闭集连续函数性质2：一致连续
 用反证法，设函数$f$在有界闭集D上连续但不一致连续，则：
 $$      
-\exists \varepsilon >0 满足 \forall \delta >0 只要P,Q \in D有r(P,Q)<\delta，则|f(P)-f(Q)| \ge \varepsilon\\
+\exists \varepsilon >0 满足 \forall \delta >0 \exists P,Q \in D:r(P,Q)<\delta，使得|f(P)-f(Q)| \ge \varepsilon\\
 取\delta = \frac{1}{n}则\\
-|f(P_n)-f(Q_n)| \ge \frac{1}{n}\\
+r(P_n,Q_n) < \frac{1}{n}且|f(P_n)-f(Q_n)| \ge \varepsilon\\
 P_n \in D，故存在收敛子列\{P_{n_k}\}.设极限为P_0\\
 
-又|f(P_{n_k}) - f(Q_{n_k})| \ge \frac{1}{n_k}\\
-且r(P_0, Q_{n_k}) \le r(P_0,P_{n_k}) + r(P_{n_k}, Q_{n_k})\\
-\le \varepsilon_1 + \frac{1}{n_k}\\
+有r(P_0, Q_{n_k}) \le r(P_0,P_{n_k}) + r(P_{n_k}, Q_{n_k})\\
+< \varepsilon_1 + \frac{1}{n_k}\\
 
 也即Q_{n_k} \to P_0\\
 
-故|f(P_{n_k}) - f(Q_{n_k})| \to 0, 与假设矛盾，原命题得证
+由极限定义和连续性，有|f(P_{n_k}) - f(Q_{n_k})| \to 0, 与假设矛盾，原命题得证
 $$
 
 ### 3. 证明$\cos xy$不一致连续
@@ -75,7 +106,7 @@ $$
     逐段检查，必存在一段，其端点异号。\\然后用参数方程化二元为一元，然后利用一元介值定理得证
 $$
 
-### 5. 证明不一致有界
+### 5. 证明不一致连续
 证明：$1/(1-xy)$在$[0,1) \times [0,1)$上连续但不一致连续
 证：
 $$
@@ -133,7 +164,7 @@ $$
    以及：
    $$
    \forall x,\exist \varepsilon_1 > 0, \\
-   |f(x,y) - f(x_0,y)| < \varepsilon_1
+   |f(x,y_0) - f(x_0,y_0)| < \varepsilon_1
    $$
 
    只要令：
@@ -179,6 +210,7 @@ $$
    
 ### 7. 可微的必要条件
 证明：可微推出偏导数存在
+
 证：
 由$f(x,y)$可微，有
 $$
@@ -296,3 +328,113 @@ $$
 ### 14. 证明二元微分中值定理
 
 ### 15. 证明二元泰勒公式
+
+### 16. 证明二元连续可微函数的极值点充分条件
+
+### 17. 求以下重极限
+1. 
+  $$
+    \lim_{(x,y)\to(0,0)} \frac{\sin(x^3+y^3)}{x^2+y^2}\\
+    解：\left|\frac{\sin(x^3+y^3)}{x^2+y^2}\right|\\
+    = \left|\frac{x^3+y^3+o(x^3+y^3)}{x^2+y^2}\right|\\
+    \le |x| + |y| + \left|\frac{o(x^3+y^3)}{x^2+y^2}\right|\\
+    \to 0 + 0 + 0 = 0\\
+    故所求为0
+  $$
+2. 
+  $$
+    \lim_{(x,y)\to(0,0)}x^2 y^2 \ln(x^2+y^2)\\
+    解：|x^2 y^2 \ln(x^2+y^2)|\\
+    = |\frac{x^2}{x^2+y^2}(x^2+y^2)\ln(x^2+y^2)|\\
+    \le |(x^2+y^2)\ln(x^2+y^2)| \to 0\\
+    故所求为0
+  $$
+3. 
+  $$
+    \lim_{(x,y)\to(0,0)}\frac{x^2 y^{3/2}}{x^4+y^2}\\
+    解：取路径y=kx^3,\\
+    \frac{x^2 y^{3/2}}{x^4+y^2}=\frac{k^{3/2}}{x^3+k^2x^5} \to \infty\\
+    又取y=kx时极限为0，故重极限不存在
+  $$
+
+4. 
+   $$
+   \lim_{(x,y)\to(0,0)}\frac{e^x - e^y}{\sin(xy)}\\
+   解：取y=x得路径极限为0\\
+   再取y=\ln (x+1)，则\\
+   \frac{e^x - e^y}{\sin(xy)} \\
+   = \frac{e^x - x - 1}{\sin(x\ln(1+x))}\\
+   = \left.1\middle/\left(\frac{x\ln(x+1)}{e^x-x-1} + o(x\ln(x+1))/(e^x-x-1)\right)\right.
+   $$
+   又
+   $$
+   \frac{x\ln(x+1)}{e^x-x-1}\\
+   = \frac{x(x+o(x))}{x^2/2+o(x^2)} = 2
+   $$
+   可知原极限为$1/2$，不等于$y=x$路径上的极限，故重极限不存在
+
+
+### 18. 推广闭集上的连续函数性质至无穷区间
+已知$f(x,y)在R^2$上连续，$\lim_{x \to \infty, y \to \infty}f(x,y) = A$，求证：
+
+1. $f(x,y)$在$\mathrm{R}^2$上有界
+2. $f(x,y)$在$\mathrm{R}^2$上一致连续
+
+证：
+
+1. 
+  $$
+    下证有上界，下界同理。\\
+    取\varepsilon = 1\\
+    由极限性质，有：\\
+    \exists M_1 > 0, \forall P:r(P) > M_1,|f(P)-A|<1\\
+    也即f(P)<A+1\\
+    取D=\{P|r(P) \le M_1\}，D为有界闭集\\
+    \forall P \in D，f(P) \le M_2，其中M_2为f在D上的最大值\\
+    令M=\max(A+1,M_2),由上可知，\forall P \in \mathrm{R}^2,|f(P)|\le M\\
+    也即M为f(P)上界；同理可证有下界\\
+    有界性得证
+  $$
+
+2. 
+   $$
+    由极限性质，有：\\
+    \exists M_1 > 0, \forall P_1,P_2:r(P_1),r(P_2) > M_1,|f(P_1)-f(P_2)|<\varepsilon/2\\
+    （这是柯西收敛准则）\\
+    取D_1=\{P|r(P) \le M_1 < M\},\\
+    此外，令D = \{P|r(P) \le M\},D为有界闭集\\
+    则f在D上一致连续，也即：\\
+    \exist \delta >0, \forall P_1,P_2 \in D且r(P_1,P_2)<\delta/2, |f(P_1)-f(P_2)| < \varepsilon /2\\
+    由上可知，f在D，\bar{D_1}上分别一致连续\\
+  $$
+
+  再证$f在R^2上一致连续$：
+
+  $$
+    \forall P_1 \in D_1,  \forall P_3 \in \bar{D},\exist P_2 \in D\cap\bar{D_1}，使得r(P_1,P_2)<\delta/2且r(P_2,P_3)<\delta/2，\\
+    也即r(P_1,P_3)<\delta\\
+    |f(P_1)-f(P_3)| \le |f(P_1)-f(P_2)|+|f(P_2)-f(P_3)| < \varepsilon / 2 + \varepsilon / 2 = \varepsilon\\
+    一致连续性得证
+  $$
+
+### 19. 含参数重极限的分类讨论
+讨论
+$$
+  f(x,y) =  \frac{x}{(x^2+y^2)^p},p>0
+$$
+在$(0,0)$处的重极限
+
+解：
+当$p\ge\frac{1}{2}$时，取$y=x$：
+$$
+\frac{1}{2} x^{1-2p} \to 0
+$$
+故极限不存在
+
+当$p<\frac{1}{2}$时：
+$$
+  \left|\frac{x}{(x^2+y^2)^p}\right|\\
+  = |x^{1-2p}/(\frac{x^2+y^2}{x^2})|\\
+  \le |x^{1-2p}| \to 0
+$$
+故极限为0

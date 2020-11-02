@@ -88,7 +88,9 @@
   - `\left/\right` + 定界符号：自适应大小的定界符号
 - 累计符号:
   - `\sum_{i=1}^{n}`:$\sum_{i=1}^{n}$
-  - `\sum\limits_{i=1}^{n}`:$\sum\limits_{i=1}^{n}$
+  - `\sum_{i=1}^{n}（行间）`:
+  $$\sum_{i=1}^{n}$$
+  - `\sum\limits_{i=1}^{n}（行内）`:$\sum\limits_{i=1}^{n}$
   - `\prod`同理：$\prod_{i=0}^{n}$
 - 微积分
   - 所有大符号都可以通过加`\limits`来把下标转成正确的格式

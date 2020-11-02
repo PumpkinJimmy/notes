@@ -8,7 +8,7 @@
 - Makefile支持变量、通配符跟某些函数
 - 由于要调用具体编译器，Makefile无法跨平台
 - Makefile常常配合configure工作（其实就是一个用于配置的Linux shell脚本）
-- cmake更牛逼，跨平台，更见解
+- cmake更牛逼，跨平台，更间接
 ### 关于PHONY
 由于依赖树的根是第一个target，若以诸如clean/install这种没有被依赖的target在make的时候不会执行，只有在显式使用make clean/install时才会执行——这正是我们想要的。
 但若Makefile目录下恰好有一个名为clean或者install的文件，而这个文件又不被修改，那目标clean/install就一直是最新的，命令不会执行。解决方案就是PHONY。语法：
