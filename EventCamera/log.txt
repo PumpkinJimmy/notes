@@ -1,0 +1,11 @@
+epoch: 01 (22) : validation: 00086 (00861)
+epoch: 01 (22) : validation: 00172 (00861)
+epoch: 01 (22) : validation: 00258 (00861)
+epoch: 01 (22) : validation: 00344 (00861)
+epoch: 01 (22) : validation: 00430 (00861)
+epoch: 01 (22) : validation: 00516 (00861)
+epoch: 01 (22) : validation: 00602 (00861)
+epoch: 01 (22) : validation: 00688 (00861)
+epoch: 01 (22) : validation: 00774 (00861)
+epoch: 01 (22) : validation: 00860 (00861)
+Testing results: mean disparity error = 0.530 [pix], 1PE = 8.004 [%], mean depth error = 0.127 [m], median depth error = 0.054 [m], time-per-image = 0.07 [sec].

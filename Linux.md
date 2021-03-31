@@ -180,7 +180,7 @@ chkconfig –list | grep on # 列出所有启动的系统服务程序
 rpm -qa # 查看所有安装的软件包
 ```
 
-### 常用后相关命令
+### 常用后台相关命令
 0. 后台运行的程序都需要使用进程号pid管理
    
    使用`kill my_pid`终止进程。
@@ -244,3 +244,37 @@ dpkg -x your-package your-dir
 使用`fg`指令复原
 
 注：挂起相当于“暂停”，挂起的程序不会在后台运行的
+
+
+### tmux
+tmux是一个强大的终端复用工具
+
+使用tmux的理由：
+- 在无GUI环境下使用左右分屏
+- 创建多个会话，将当前执行的任务切换至后台继续（比`Ctrl-z`的一系列操作和nohup都要方便）
+- 在关闭SSH远程连接后保持进程在后台运行
+
+使用方法：
+```bash
+tmux # 创建新会话
+tmux ls # 列出会话
+tmux attach # 调出现有的会话
+```
+
+在tmux会话中有如下快捷键（在输入Ctrl-b组合后使用）：
+- d 脱离当前会话
+- s 切换会话
+- " 上下分屏
+- % 左右分屏
+- 方向键 在多个分屏中切换光标位置
+- c 创建新窗口
+- & 关闭新窗口
+- 数字键 切换至窗口
+- p 上一个窗口
+- n 下一个窗口
+
+区分三个tmux概念：会话(session)、窗口(window)和面板(panel)
+- 当前终端展示的整个屏幕就是一个window，一个session可以有多个window
+- 一个window可以上下、所有分割成多个panel
+- session和window在业务上没有本质区别，仅仅是习惯问题。一般使用多window+panel或者多session+panel就ok了
+- 一种合理的实践是：将不同领域的工作放在不同的session中，然后session中使用不同窗口来防止不同的具体任务，在按需要分屏使用panel

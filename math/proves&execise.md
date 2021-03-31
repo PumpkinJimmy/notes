@@ -247,11 +247,36 @@ $$
 
 ### 8. 可微充分条件
 证明：若二元函数$f(x,y)$的两偏导数连续，则$f$可微
-（待完善）
+$$
+  f(x_0+\Delta x, y_0 + \Delta y)\\
+  = f(x_0, y_0+\Delta y) + f_x(x_0 + \theta_1 \Delta x, y_0 + \Delta y)\Delta x\\
+  （一元函数拉格朗日中值定理）\\
+  = f(x_0,y_0) \\
+  + f_y(x_0, y_0 + \theta_2\Delta y)\Delta y\\ 
+  + f_x(x_0 + \theta_1 \Delta x, y_0 + \Delta y)\Delta x ①\\
+  由f_y连续性，f_y(x_0, y_0 + \theta_2\Delta y) = f_y(x_0, y_0) + \beta\\
+  同理f_x(x_0 + \theta_1 \Delta x, y_0 + \Delta y) = f_x(x_0,y_0) + \alpha\\
+  也即①=f(x_0,y_0) + f_x(x_0,y_0)\Delta x + f_y(x_0,y_0)\Delta y + \alpha \Delta x + \beta \Delta y\\
+$$
+下证$\alpha \Delta x + \beta \Delta y = o(\rho)$
+$$
+  \left|\frac{\alpha \Delta x + \beta \Delta y}{\sqrt{\Delta x^2+\Delta y^2}}\right|\\
+  \le |\alpha| + |\beta| \to 0
+$$
+
+综上，可微条件充分性得证
+
+且作为推论证明了$\Delta f = f_x \Delta x + f_y \Delta y + o(\rho)$
 
 ### 9. 混合二阶偏导数相等的条件
-证明：若一二元函数在$(x_0,y_0)$处连续可导，则$f_{xy}(x_0,y_0) = f_{yx}(x_0,y_0)$
-（待完善）
+证明：若一二元函数有$f_{xy},f_{yx}在(x_0,y_0)$处连续，则$f_{xy}(x_0,y_0) = f_{yx}(x_0,y_0)$
+$$
+  构造函数F(\Delta x, \Delta y) \\
+  = [f(x+\Delta x, y+\Delta y) - f(x+\Delta x),y)]-[f(x,y+\Delta y) - f(x,y)]\\
+
+  对两个变元应用微分中值定理，再利用连续性把中值增量去掉即可（待完善）
+$$
+注：套用思路可以证明弱化条件：$f_x,f_y可微$
 
 ### 10. 证明函数在点的任一邻域内无界
 证明：
@@ -438,3 +463,66 @@ $$
   \le |x^{1-2p}| \to 0
 $$
 故极限为0
+
+### 20. 可微路径上的多元函数可微性
+设
+$$
+  f(x,y) = \begin{cases}
+  \frac{x^3}{x^2+y^2},x^2+y^2\ne 0\\
+  0, x^2+y^2=0
+  \end{cases}
+$$
+求证：
+1. 设任意一条过原点的可微曲线：
+   $$
+    \begin{cases}
+    x = x(t)\\
+    y = y(t)
+    \end{cases}\\
+    其中，x^2(0)+y^2(0)=0, t\ne 0时x^2(t)+y^2\ne 0,\\
+    且x(t),y(t)可微
+   $$
+   证明$f(x(t),y(t))$可微
+
+2. $f(x,y)$在$(0,0)$处不可微
+  
+证：
+
+1. 
+   $$
+    设g(t) = f(x(t),y(t))\\
+    则g'(t) = \frac{3x^2x'(x^2+y^2)+x^3(2xx'+2yy')}{(x^2+y^2)^2}(t\ne 0)\\
+   $$
+   讨论$g'(0)$
+
+   $$
+    g'(0) = \lim_{t\to0} \frac{g(t) - g(0)}{t} \\
+    = \lim_{t\to 0} \frac{x^3(t)}{t(x^2(t)+y^2(t))}\\
+   $$
+
+   ① $若 x'(0) \ne 0$
+   $$
+    g'(0) = \lim_{t\to0} \left[\frac{x(t)}{t}\right]^3 \frac{1}{[x(t)/t]^2+[y(t)/t]^2}\\
+    = \frac{x'(0)^3}{x'(0)^2+y'(0)^2}
+   $$
+   ② $若 x'(0) = 0$
+   $$
+    注意到|\frac{x^3(t)}{t(x^2(t)+y^2(t))}| \le |\frac{x(t)}{t}|\to 0\\
+    从而有g'(0) = 0
+   $$
+   综上，$g(t)$在定义域内可微
+  
+2. 略，只需要注意$f_x(0,0) = 1$而非$0$
+
+### 21. 可微充分条件弱化的证明
+证明：若$f_y(x_0,y_0)$存在，$f_x(x_0,y_0)$连续，证明$f在(x_0,y_0)$可微
+$$
+  f_y(x_0,y_0) = \lim_{\Delta y \to 0} \frac{f(x_0,y_0 + \Delta y) - f(x_0,y_0)}{\Delta y }\\
+  \Rightarrow f(x_0,y_0+\Delta y) = f(x_0,y_0) + f_y(x_0,y_0)\Delta y + \beta \Delta y\\
+$$
+也即
+$$
+  f(x_0+\Delta x,y_0 + \Delta y) = \\
+  f(x_0,y_0) + f_x(x_0+\theta\Delta x,y_0 + \Delta y)\Delta x + f_y(x_0,y_0)\Delta y + \beta \Delta y\\
+  = f(x_0,y_0) + f_x(x_0,y_0)\Delta x + f_y(x_0,y_0)\Delta y + \alpha \Delta x + \beta \Delta y
+$$
